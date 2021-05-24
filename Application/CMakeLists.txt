@@ -11,6 +11,7 @@ target_sources(${TARGET_NAME}
         App.cpp
         Imu/Imu.cpp
         NeoM9N/NeoM9N.cpp
+        main.cpp
         )
 
 target_include_directories(

@@ -33,5 +33,5 @@ target_compile_definitions(${TARGET_NAME}
         )
 target_link_options(${TARGET_NAME} PUBLIC -Wl,-print-memory-usage,--sort-section=alignment,--gc-sections,--cref,-M=${TARGET_NAME}.map -nostdlib -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb) #-T BaseKe16_Debug.ld)
 
-add_executable(${TEST_NAME} null.cpp)
-target_link_libraries(${TEST_NAME} gtest gtest_main)
+#add_executable(${TEST_NAME} null.cpp)
+#target_link_libraries(${TEST_NAME} gtest gtest_main)
