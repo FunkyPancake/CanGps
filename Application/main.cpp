@@ -36,7 +36,6 @@
 #include "peripherals.h"
 #include "pin_mux.h"
 #include "App.h"
-/* TODO: insert other definitions and declarations here. */
 
 
 /*******************************************************************************

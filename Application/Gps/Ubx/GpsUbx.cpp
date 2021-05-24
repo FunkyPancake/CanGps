@@ -51,8 +51,10 @@ void GpsUbx::ParsePayload(std::vector<uint8_t> &message)
     };
 }
 
-std::vector<uint8_t>
-GpsUbx::BuildMessage(GpsUbx::MsgClass msgClass, uint8_t subClass, uint16_t length, std::vector<uint8_t> payload)
+std::vector<uint8_t> GpsUbx::BuildMessage(GpsUbx::MsgClass msgClass,
+                                          uint8_t subClass,
+                                          uint16_t length,
+                                          std::vector<uint8_t> payload)
 {
     std::vector<uint8_t> a = {0xB5, 0x62, static_cast<uint8_t>(msgClass), subClass};
     CalcChecksum(payload);
