@@ -5,14 +5,15 @@
 #ifndef CANGPS_GPSUBX_H
 #define CANGPS_GPSUBX_H
 
+#include "Gps.h"
 #include <cstdint>
 #include <vector>
-#include "Gps.h"
 
-class GpsUbx:public Gps {
-
+class GpsUbx : public Gps
+{
 public:
-    enum MsgClass{
+    enum MsgClass
+    {
         NAV = 0x01,
         RXM = 0x02,
         INF = 0x04,
@@ -27,10 +28,15 @@ public:
         SEC = 0x027,
         HNR = 0x28
     };
-    std::vector<uint8_t> BuildMessage(MsgClass msgClass, uint8_t subClass, uint16_t length, std::vector<uint8_t>payload);
+    std::vector<uint8_t> BuildMessage(MsgClass msgClass,
+                                      uint8_t subClass,
+                                      uint16_t length,
+                                      std::vector<uint8_t> payload);
     bool ParseMessage(std::vector<uint8_t> message);
+
 private:
-    enum{
+    enum
+    {
         NAV_AOPSTATUS,
         NAV_ATT,
         NAV_CLOCK,
@@ -42,25 +48,26 @@ private:
         NAV_GEOFENCE,
         NAV_HPPOSECEF,
         NAV_HPPOSLLH
-    }NavClass;
-    enum{
+    } NavClass;
+    enum
+    {
         ACK_ACK = 0x01,
         ACK_NAK = 0x00
-    }AckClass;
-    enum{
-
-    }CfgClass;
-
+    } AckClass;
+    enum
+    {
+    
+    } CfgClass;
+    
     void ParsePayload(std::vector<uint8_t> &message);
-
+    
     bool CheckChecksum(std::vector<uint8_t> &message);
-
+    
     bool CheckHeader(std::vector<uint8_t> &message);
-
+    
     bool CheckLength(std::vector<uint8_t> &message);
-
+    
     uint16_t CalcChecksum(std::vector<uint8_t> &payload);
 };
 
-
-#endif //CANGPS_GPSUBX_H
+#endif//CANGPS_GPSUBX_H

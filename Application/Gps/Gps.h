@@ -5,11 +5,11 @@
 #ifndef CANGPS_GPS_H
 #define CANGPS_GPS_H
 
-
 #include <cstdint>
 
-class Gps {
-public:
+class Gps
+{
+  public:
     float Latitude;
     float Longitude;
     float Speed;
@@ -20,5 +20,4 @@ public:
     uint8_t Status;
 };
 
-
-#endif //CANGPS_GPS_H
+#endif//CANGPS_GPS_H

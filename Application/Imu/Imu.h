@@ -5,12 +5,11 @@
 #ifndef CANGPS_IMU_H
 #define CANGPS_IMU_H
 
-
-class Imu {
+class Imu
+{
 public:
-    float Xacc,Yacc,Zacc;
-    float Xyaw,Yyaw,Zyaw;
+    float Xacc, Yacc, Zacc;
+    float Xyaw, Yyaw, Zyaw;
 };
-
 
 #endif //CANGPS_IMU_H

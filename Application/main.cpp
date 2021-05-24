@@ -65,14 +65,14 @@ int main(void)
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
-
+    
     App();
     vTaskStartScheduler();
     /* Enter an infinite loop, just incrementing a counter. */
-
-    while(1)
+    
+    while (1)
     {
     }
-
+    
     return 0;
 }

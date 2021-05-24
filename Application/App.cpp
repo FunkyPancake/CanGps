@@ -9,10 +9,10 @@
 #include "Imu.h"
 #include "GpsUbx.h"
 #include "EmuCan.h"
-#include "flexcan.h"
+#include "FlexCan.h"
 #include "NeoM9N.h"
 
-const UBaseType_t app_task_PRIORITY =  (configMAX_PRIORITIES - 1);
+const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
 
 [[noreturn]] static void app_task(void *pvParameters);
 
@@ -25,10 +25,10 @@ const UBaseType_t app_task_PRIORITY =  (configMAX_PRIORITIES - 1);
     GpsUbx ubx{};
     Imu imu{};
     NeoM9N gpsDevice;
-    EmuCan emuCan(ubx,imu,&can,0x400);
+    EmuCan emuCan(ubx, imu, &can, 0x400);
     gpsDevice.Config();
-
-    for(;;)
+    
+    for (;;)
     {
         auto data = gpsDevice.GetData();
         ubx.ParseMessage(data);
@@ -39,9 +39,9 @@ const UBaseType_t app_task_PRIORITY =  (configMAX_PRIORITIES - 1);
 
 void App()
 {
-    if(xTaskCreate(app_task, "app_task", configMINIMAL_STACK_SIZE + 1000, nullptr, app_task_PRIORITY, nullptr) != pdPASS)
+    if (xTaskCreate(app_task, "app_task", configMINIMAL_STACK_SIZE + 1000, nullptr, app_task_PRIORITY, nullptr)
+        != pdPASS)
     {
-        while(1)
-            ;
+        while (1);
     }
 }
