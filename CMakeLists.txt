@@ -13,11 +13,7 @@ add_executable(${TARGET_NAME}
 add_subdirectory(GeneratedCode)
 add_subdirectory(Application)
 add_subdirectory(KeCommon)
-#add_subdirectory(Lib)
-#
-#add_executable(${TEST_NAME} null.cpp)
-#target_link_libraries(${TEST_NAME} gtest gtest_main)
-
+target_link_libraries(${TARGET_NAME} KeCommon)
 target_compile_options(${TARGET_NAME} PRIVATE
         -O0 -fno-common -g3 -Wall -c -ffunction-sections -fno-rtti -fdata-sections -ffreestanding
         -fno-builtin -fno-exceptions -fmerge-constants -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
@@ -36,3 +32,6 @@ target_compile_definitions(${TARGET_NAME}
         __NEWLIB__
         )
 target_link_options(${TARGET_NAME} PUBLIC -Wl,-print-memory-usage,--sort-section=alignment,--gc-sections,--cref,-M=${TARGET_NAME}.map -nostdlib -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb) #-T BaseKe16_Debug.ld)
+
+add_executable(${TEST_NAME} null.cpp)
+target_link_libraries(${TEST_NAME} gtest gtest_main)

@@ -63,6 +63,6 @@ uint16_t GpsUbx::CalcChecksum(std::vector<uint8_t> &payload)
         cka+=b;
         ckb=+cka;
     }
-    return cka <<8 + ckb;
+    return (cka <<8) + ckb;
 }
 

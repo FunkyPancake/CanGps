@@ -10,6 +10,7 @@ target_sources(${TARGET_NAME}
         EmuCan.cpp
         App.cpp
         Imu/Imu.cpp
+        NeoM9N/NeoM9N.cpp
         )
 
 target_include_directories(
@@ -17,5 +18,6 @@ target_include_directories(
         PUBLIC
         .
         Imu
+        NeoM9N
 )
 

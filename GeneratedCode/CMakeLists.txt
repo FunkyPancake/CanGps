@@ -5,21 +5,21 @@ project(GeneratedCode LANGUAGES CXX C)
 
 
 add_subdirectory(board)
-add_subdirectory(freertos)
-add_subdirectory(drivers)
+#add_subdirectory(../KeCommon/freertos)
+#add_subdirectory(../KeCommon/drivers)
 
 target_sources(
     ${TARGET_NAME}
     PRIVATE
-    source/cpp_config.cpp
-    source/main.cpp
-    source/semihost_hardfault.c
+        ../KeCommon/source/cpp_config.cpp
+        ../Application/main.cpp
+        ../KeCommon/source/semihost_hardfault.c
 )
 
 target_include_directories(
         ${TARGET_NAME}
         PUBLIC
-        CMSIS
-        source
-        device
+        ../KeCommon/CMSIS
+        ../KeCommon/source
+        ../KeCommon/device
 )
