@@ -3,7 +3,7 @@
 //
 
 #include "GpsUbx.h"
-#include <vector>
+
 
 //void GpsUbx::ParseMessage(std::vector<uint8_t> message) {
 //        if (CheckHeader(message) && CheckChecksum(message))
@@ -56,18 +56,19 @@ std::vector<uint8_t> GpsUbx::BuildMessage(GpsUbx::MsgClass msgClass,
                                           uint16_t length,
                                           std::vector<uint8_t> payload)
 {
-    std::vector<uint8_t> a = {0xB5, 0x62, static_cast<uint8_t>(msgClass), subClass};
-    CalcChecksum(payload);
-    return a;
+    auto checksum = CalcChecksum(payload);
+    
+//    std::vector<uint8_t> a={0xB5, 0x62, static_cast<uint8_t>(msgClass), subClass,checksum};
+    return std::vector<uint8_t>{};
 }
 
-uint16_t GpsUbx::CalcChecksum(std::vector<uint8_t> &payload)
+std::array<uint8_t,2> GpsUbx::CalcChecksum(std::vector<uint8_t> &payload)
 {
-    auto cka = 0, ckb = 0;
+    uint8_t cka = 0, ckb = 0;
     for (auto b : payload)
     {
         cka += b;
         ckb = +cka;
     }
-    return (cka << 8) + ckb;
+    return {cka, ckb};
 }

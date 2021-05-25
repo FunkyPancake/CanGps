@@ -8,6 +8,7 @@
 #include "Gps.h"
 #include <cstdint>
 #include <vector>
+#include <array>
 
 class GpsUbx : public Gps
 {
@@ -67,7 +68,7 @@ private:
     
     bool CheckLength(std::vector<uint8_t> &message);
     
-    uint16_t CalcChecksum(std::vector<uint8_t> &payload);
+    std::array<uint8_t,2> CalcChecksum(std::vector<uint8_t> &payload);
 };
 
 #endif//CANGPS_GPSUBX_H
