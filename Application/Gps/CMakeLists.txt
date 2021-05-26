@@ -7,6 +7,7 @@ target_sources(${TARGET_NAME}
     PRIVATE
     Gps.cpp
     Ubx/GpsUbx.cpp
+    UbxMessage.cpp
     )
 
 

@@ -5,7 +5,7 @@ project(${TARGET_NAME} LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 11)
 
-if (NOT CMAKE_BUILD_TYPE MATCHES Test)
+if (CMAKE_BUILD_TYPE MATCHES Debug)
 
 
     add_executable(${TARGET_NAME}
@@ -51,8 +51,13 @@ elseif (CMAKE_BUILD_TYPE MATCHES Test)
     add_executable(
         Utest
         Application/Gps/Test/UbxTest.cpp
+        Application/Gps/UbxMessage.cpp
     )
-
+    target_include_directories(
+        Utest
+        PUBLIC
+        Application/Gps
+    )
     target_link_libraries(
         Utest
         gtest_main
