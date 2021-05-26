@@ -7,7 +7,6 @@
 #include "peripherals.h"
 
 #include "Imu.h"
-#include "GpsUbx.h"
 #include "EmuCan.h"
 #include "FlexCan.h"
 #include "NeoM9N.h"
@@ -22,16 +21,15 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
     const TickType_t xFrequency = 2;
     xLastWakeTime = xTaskGetTickCount();
     FlexCan can{};
-    GpsUbx ubx{};
     Imu imu{};
-    NeoM9N gpsDevice;
-    EmuCan emuCan(ubx, imu, &can, 0x400);
-    gpsDevice.Config();
-    
+    NeoM9N gps;
+    EmuCan emuCan(gps, imu, &can, 0x400);
+    gps.Config();
+    imu.Config();
     for (;;)
     {
-        auto data = gpsDevice.GetData();
-        ubx.ParseMessage(data);
+        gps.GetData();
+        imu.GetData();
         emuCan.SendFrames();
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }

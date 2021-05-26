@@ -10,6 +10,8 @@ class Imu
 public:
     float Xacc, Yacc, Zacc;
     float Xyaw, Yyaw, Zyaw;
+    void GetData();
+    void Config();
 };
 
 #endif //CANGPS_IMU_H
