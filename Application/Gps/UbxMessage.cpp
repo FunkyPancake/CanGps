@@ -8,13 +8,15 @@
 
 std::vector<uint8_t> UbxMessage::Serialize()
 {
-    std::vector<uint8_t> header{0xB5, 0x62};
-    std::vector<uint8_t> data{ static_cast<uint8_t>(MsgClass), MsgSubclass,static_cast<uint8_t>(Payload.size() & 0xFF), static_cast<uint8_t>(Payload.size() >> 8)};
-    data.insert(data.end(), Payload.begin(), Payload.end());
+    std::vector<uint8_t> data(Payload.size() + 8, 0);
+    std::vector<uint8_t> initData{0xB5, 0x62, static_cast<uint8_t>(MsgClass), MsgSubclass, static_cast<uint8_t>(Payload.size()), static_cast<uint8_t>(Payload.size() >> 8)};
+    std::copy(initData.begin(), initData.end(), data.begin());
+    std::copy(Payload.begin(), Payload.end(), data.begin() + 6);
+
     auto checksum = CalcChecksum(data);
-    
-    data.insert(data.begin(), header.begin(), header.end());
-    data.insert(data.end(), checksum.begin(), checksum.end());
+
+    std::copy(checksum.begin(), checksum.end(), data.end() - 2);
+
     return data;
 }
 
@@ -27,17 +29,18 @@ bool UbxMessage::Deserialize(std::vector<uint8_t> data)
         {
             MsgClass = static_cast<MsgClassEnum>(data[2]);
             MsgSubclass = data[3];
-            Payload = {data.begin() + 6, data.end()-2};
+            Payload = {data.begin() + 6, data.end() - 2};
             validFrame = true;
         }
-        
     }
     return validFrame;
 }
 
 UbxMessage::UbxMessage()
 {
-
+    MsgClass = static_cast<MsgClassEnum>(0);
+    MsgSubclass = 0;
+    Payload = std::vector<uint8_t>{};
 }
 
 UbxMessage::UbxMessage(UbxMessage::MsgClassEnum msgClass, uint8_t msgSubclass, std::vector<uint8_t> payload)
@@ -51,7 +54,7 @@ bool UbxMessage::CheckChecksum(std::vector<uint8_t> &data)
 {
     uint8_t cka = 0, ckb = 0;
     auto len = data.size();
-    for (auto i = 2u; (len - 2 )> i; i++)
+    for (auto i = 2u; (len - 2) > i; i++)
     {
         cka += data[i];
         ckb += cka;
@@ -62,9 +65,9 @@ bool UbxMessage::CheckChecksum(std::vector<uint8_t> &data)
 std::array<uint8_t, 2> UbxMessage::CalcChecksum(std::vector<uint8_t> &data)
 {
     uint8_t cka = 0, ckb = 0;
-    for (auto b : data)
+    for (auto i = 2u; (data.size() - 2) > i; i++)
     {
-        cka += b;
+        cka += data[i];
         ckb += cka;
     }
     return {cka, ckb};

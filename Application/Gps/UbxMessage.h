@@ -5,13 +5,16 @@
 #ifndef CANGPS_APPLICATION_GPS_UBXMESSAGE_H
 #define CANGPS_APPLICATION_GPS_UBXMESSAGE_H
 
-#include <vector>
-#include <cstdint>
 #include <array>
+#include <cstdint>
+#include <vector>
+
 class UbxMessage
 {
+private:
     bool CheckChecksum(std::vector<uint8_t> &data);
-    std::array<uint8_t,2> CalcChecksum(std::vector<uint8_t> &data);
+    std::array<uint8_t, 2> CalcChecksum(std::vector<uint8_t> &data);
+
 public:
     enum MsgClassEnum
     {
@@ -33,9 +36,9 @@ public:
     uint8_t MsgSubclass;
     std::vector<uint8_t> Payload;
     UbxMessage();
-    UbxMessage(MsgClassEnum msgClass,uint8_t msgSubclass, std::vector<uint8_t> payload);
+    UbxMessage(MsgClassEnum msgClass, uint8_t msgSubclass, std::vector<uint8_t> payload);
     std::vector<uint8_t> Serialize();
     bool Deserialize(std::vector<uint8_t> data);
 };
 
-#endif //CANGPS_APPLICATION_GPS_UBXMESSAGE_H
+#endif//CANGPS_APPLICATION_GPS_UBXMESSAGE_H
