@@ -7,12 +7,11 @@ set(CMAKE_CXX_STANDARD 11)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
 
-
     add_executable(${TARGET_NAME}
         null.cpp)
 
     add_subdirectory(GeneratedCode)
-    add_subdirectory(Application)
+
     add_subdirectory(KeCommon)
 
     target_link_libraries(${TARGET_NAME} KeCommon)
@@ -34,8 +33,8 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         DEBUG
         __NEWLIB__
         )
-
-    target_link_options(${TARGET_NAME} PRIVATE -Wl,-print-memory-usage,--sort-section=alignment,--gc-sections,--cref,-M=${TARGET_NAME}.map -nostdlib -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb) # -T BaseKe16_Debug.ld)
+    target_link_directories(${TARGET_NAME} PRIVATE KeCommon/Linker)
+    target_link_options(${TARGET_NAME} PRIVATE -Wl,-print-memory-usage,--sort-section=alignment,--gc-sections,--cref,-M=${TARGET_NAME}.map -nostdlib -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb  -T Ke16F256.ld)
 
 elseif (CMAKE_BUILD_TYPE MATCHES Test)
     include(FetchContent)
@@ -50,14 +49,8 @@ elseif (CMAKE_BUILD_TYPE MATCHES Test)
 
     add_executable(
         Utest
-        Application/Gps/Test/UbxTest.cpp
-        Application/Gps/UbxMessage.cpp
-    )
-    target_include_directories(
-        Utest
-        PUBLIC
-        Application/Gps
-    )
+        null.cpp
+        )
     target_link_libraries(
         Utest
         gtest_main
@@ -67,3 +60,5 @@ elseif (CMAKE_BUILD_TYPE MATCHES Test)
 
     gtest_discover_tests(Utest)
 endif ()
+add_subdirectory(Application)
+
