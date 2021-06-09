@@ -3,3 +3,13 @@
 //
 
 #include "Imu.h"
+
+void Imu::GetData()
+{
+
+}
+
+void Imu::Config()
+{
+
+}

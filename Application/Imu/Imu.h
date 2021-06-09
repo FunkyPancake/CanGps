@@ -2,8 +2,8 @@
 // Created by PC on 23.05.2021.
 //
 
-#ifndef CANGPS_IMU_H
-#define CANGPS_IMU_H
+#pragma once
+
 
 class Imu
 {
@@ -13,5 +13,3 @@ public:
     void GetData();
     void Config();
 };
-
-#endif //CANGPS_IMU_H

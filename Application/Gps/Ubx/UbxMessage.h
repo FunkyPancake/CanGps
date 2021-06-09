@@ -2,8 +2,7 @@
 // Created by PC on 26.05.2021.
 //
 
-#ifndef CANGPS_APPLICATION_GPS_UBXMESSAGE_H
-#define CANGPS_APPLICATION_GPS_UBXMESSAGE_H
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -41,4 +40,3 @@ public:
     bool Deserialize(std::vector<uint8_t> data);
 };
 
-#endif//CANGPS_APPLICATION_GPS_UBXMESSAGE_H

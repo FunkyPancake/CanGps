@@ -2,8 +2,8 @@
 // Created by PC on 23.05.2021.
 //
 
-#ifndef CANGPS_EMUCAN_H
-#define CANGPS_EMUCAN_H
+#pragma once
+
 
 #include <cstdint>
 #include "Gps.h"
@@ -25,5 +25,3 @@ public:
     EmuCan(Gps &gps, Imu &imu, ICan *can, uint32_t baseId);
     void SendFrames();
 };
-
-#endif //CANGPS_EMUCAN_H

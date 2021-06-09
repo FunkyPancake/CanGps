@@ -1,9 +1,8 @@
 //
 // Created by PC on 22.05.2021.
 //
+#pragma once
 
-#ifndef CANGPS_GPSUBX_H
-#define CANGPS_GPSUBX_H
 
 #include "Gps.h"
 #include <cstdint>
@@ -15,7 +14,7 @@ class GpsUbx : public Gps
 public:
     enum MsgClass
     {
-        NAV = 0x01,
+    NAV = 0x01,
         RXM = 0x02,
         INF = 0x04,
         ACK = 0x05,
@@ -29,13 +28,9 @@ public:
         SEC = 0x027,
         HNR = 0x28
     };
-    std::vector<uint8_t> BuildMessage(MsgClass msgClass,
-                                      uint8_t subClass,
-                                      uint16_t length,
-                                      std::vector<uint8_t> payload);
     bool ParseMessage(std::vector<uint8_t> message);
 
-private:
+//private:
     enum
     {
         NAV_AOPSTATUS,
@@ -60,15 +55,5 @@ private:
     
     } CfgClass;
     
-    void ParsePayload(std::vector<uint8_t> &message);
     
-    bool CheckChecksum(std::vector<uint8_t> &message);
-    
-    bool CheckHeader(std::vector<uint8_t> &message);
-    
-    bool CheckLength(std::vector<uint8_t> &message);
-    
-    std::array<uint8_t,2> CalcChecksum(std::vector<uint8_t> &payload);
 };
-
-#endif//CANGPS_GPSUBX_H
