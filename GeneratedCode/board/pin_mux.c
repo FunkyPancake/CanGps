@@ -55,6 +55,8 @@ BOARD_InitPins:
   - {pin_num: '2', peripheral: LPSPI1, signal: SCK, pin_signal: ADC2_SE0/PTD0/FTM0_CH2/LPSPI1_SCK/FTM2_CH0/FXIO_D0/TRGMUX_OUT1}
   - {pin_num: '46', peripheral: LPSPI1, signal: SOUT, pin_signal: ADC1_SE2/PTD2/FTM3_CH4/LPSPI1_SOUT/FXIO_D4/TRGMUX_IN5}
   - {pin_num: '45', peripheral: LPSPI1, signal: PCS0, pin_signal: ADC1_SE3/PTD3/FTM3_CH5/LPSPI1_PCS0/FXIO_D5/TRGMUX_IN4/NMI_b}
+  - {pin_num: '47', peripheral: LPUART0, signal: TX, pin_signal: ADC1_SE1/PTA3/FTM3_CH1/LPI2C0_SCL/EWM_IN/LPUART0_TX}
+  - {pin_num: '48', peripheral: LPUART0, signal: RX, pin_signal: ADC1_SE0/PTA2/FTM3_CH0/LPI2C0_SDA/EWM_OUT_b/LPUART0_RX}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -80,6 +82,12 @@ void BOARD_InitPins(void)
 
     /* PORTA10 (pin 58) is configured as noetm_Trace_SWO */
     PORT_SetPinMux(PORTA, 10U, kPORT_MuxAlt7);
+
+    /* PORTA2 (pin 48) is configured as LPUART0_RX */
+    PORT_SetPinMux(PORTA, 2U, kPORT_MuxAlt6);
+
+    /* PORTA3 (pin 47) is configured as LPUART0_TX */
+    PORT_SetPinMux(PORTA, 3U, kPORT_MuxAlt6);
 
     /* PORTA4 (pin 64) is configured as SWD_DIO */
     PORT_SetPinMux(PORTA, 4U, kPORT_MuxAlt7);

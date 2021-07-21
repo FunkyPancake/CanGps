@@ -37,6 +37,50 @@ component:
  * BOARD_InitPeripherals functional group
  **********************************************************************************************************************/
 /***********************************************************************************************************************
+ * DMA initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'DMA'
+- type: 'edma'
+- mode: 'basic'
+- custom_name_enabled: 'false'
+- type_id: 'edma_6d0dd4e17e2f179c7d42d98767129ede'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'DMA'
+- config_sets:
+  - fsl_edma:
+    - common_settings:
+      - enableContinuousLinkMode: 'false'
+      - enableHaltOnError: 'true'
+      - enableRoundRobinArbitration: 'false'
+      - enableDebugMode: 'false'
+    - dma_table: []
+    - edma_channels: []
+    - errInterruptConfig:
+      - enableErrInterrupt: 'false'
+      - errorInterrupt:
+        - IRQn: 'DMA_Error_IRQn'
+        - enable_interrrupt: 'enabled'
+        - enable_priority: 'false'
+        - priority: '0'
+        - enable_custom_name: 'false'
+    - quick_selection: 'default'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const edma_config_t DMA_config = {
+  .enableContinuousLinkMode = false,
+  .enableHaltOnError = true,
+  .enableRoundRobinArbitration = false,
+  .enableDebugMode = false
+};
+
+/* Empty initialization function (commented out)
+static void DMA_init(void) {
+} */
+
+/***********************************************************************************************************************
  * CAN0 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
@@ -264,6 +308,8 @@ instance:
     - interrupt_table:
       - 0: []
       - 1: []
+      - 2: []
+      - 3: []
     - interrupts: []
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -347,14 +393,81 @@ static void LPSPI1_init(void) {
 }
 
 /***********************************************************************************************************************
+ * LPUART0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'LPUART0'
+- type: 'lpuart'
+- mode: 'freertos'
+- custom_name_enabled: 'false'
+- type_id: 'lpuart_54a65a580e3462acdbacefd5299e0cac'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'LPUART0'
+- config_sets:
+  - fsl_lpuart_freertos:
+    - lpuart_rtos_configuration:
+      - clockSource: 'LpuartClock'
+      - srcclk: 'BOARD_BootClockRUN'
+      - baudrate: '38400'
+      - parity: 'kLPUART_ParityDisabled'
+      - stopbits: 'kLPUART_OneStopBit'
+      - buffer_size: '256'
+      - enableRxRTS: 'false'
+      - enableTxCTS: 'false'
+      - txCtsSource: 'kLPUART_CtsSourcePin'
+      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
+    - interrupt_rx:
+      - IRQn: 'LPUART0_RX_IRQn'
+      - enable_priority: 'true'
+      - priority: '4'
+    - interrupt_tx:
+      - IRQn: 'LPUART0_TX_IRQn'
+      - enable_priority: 'true'
+      - priority: '4'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+lpuart_rtos_handle_t LPUART0_rtos_handle;
+lpuart_handle_t LPUART0_lpuart_handle;
+uint8_t LPUART0_background_buffer[LPUART0_BACKGROUND_BUFFER_SIZE];
+lpuart_rtos_config_t LPUART0_rtos_config = {
+  .base = LPUART0_PERIPHERAL,
+  .baudrate = 38400UL,
+  .srcclk = 12000000UL,
+  .parity = kLPUART_ParityDisabled,
+  .stopbits = kLPUART_OneStopBit,
+  .buffer = LPUART0_background_buffer,
+  .buffer_size = LPUART0_BACKGROUND_BUFFER_SIZE,
+  .enableRxRTS = false,
+  .enableTxCTS = false,
+  .txCtsSource = kLPUART_CtsSourcePin,
+  .txCtsConfig = kLPUART_CtsSampleAtStart,
+};
+
+static void LPUART0_init(void) {
+  /* LPUART rtos initialization */
+  LPUART_RTOS_Init(&LPUART0_rtos_handle, &LPUART0_lpuart_handle, &LPUART0_rtos_config);
+  /* Interrupt vector LPUART0_RX_IRQn priority settings in the NVIC. */
+  NVIC_SetPriority(LPUART0_SERIAL_RX_IRQN, LPUART0_SERIAL_RX_IRQ_PRIORITY);
+  /* Interrupt vector LPUART0_TX_IRQn priority settings in the NVIC. */
+  NVIC_SetPriority(LPUART0_SERIAL_TX_IRQN, LPUART0_SERIAL_TX_IRQ_PRIORITY);
+}
+
+/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
 {
+  /* Global initialization */
+  DMAMUX_Init(DMA_DMAMUX_BASEADDR);
+  EDMA_Init(DMA_DMA_BASEADDR, &DMA_config);
+
   /* Initialize components */
   CAN0_init();
   LPSPI0_init();
   LPSPI1_init();
+  LPUART0_init();
 }
 
 /***********************************************************************************************************************

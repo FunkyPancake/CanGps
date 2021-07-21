@@ -2,18 +2,23 @@
 // Created by PC on 24.05.2021.
 //
 
-#ifndef CANGPS_NEOM9N_H
-#define CANGPS_NEOM9N_H
+#pragma once
+
 
 #include <vector>
 #include <cstdint>
 #include <GpsUbx.h>
+#include <ICom.h>
+#include <LpUart.h>
 
 class NeoM9N : public GpsUbx
 {
+private:
+    LpUart *_com;
 public:
-    std::vector<uint8_t> GetData();
+//    NeoM9N(ICom* comIf);
+    NeoM9N(LpUart *com);
+    bool GetData();
     void Config();
 };
 
-#endif //CANGPS_NEOM9N_H

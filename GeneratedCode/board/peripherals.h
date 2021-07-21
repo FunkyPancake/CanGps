@@ -9,11 +9,15 @@
 /***********************************************************************************************************************
  * Included files
  **********************************************************************************************************************/
+#include "fsl_edma.h"
+#include "fsl_dmamux.h"
 #include "fsl_common.h"
 #include "fsl_flexcan.h"
 #include "fsl_clock.h"
 #include "fsl_lpspi.h"
 #include "fsl_lpspi_freertos.h"
+#include "fsl_lpuart.h"
+#include "fsl_lpuart_freertos.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -23,6 +27,10 @@ extern "C" {
  * Definitions
  **********************************************************************************************************************/
 /* Definitions for BOARD_InitPeripherals functional group */
+/* Used DMA device. */
+#define DMA_DMA_BASEADDR DMA0
+/* Associated DMAMUX device that is used for muxing of requests. */
+#define DMA_DMAMUX_BASEADDR DMAMUX
 /* Definition of peripheral ID */
 #define CAN0_PERIPHERAL CAN0
 /* Definition of the clock source frequency */
@@ -49,10 +57,23 @@ extern "C" {
 #define LPSPI1_IRQ_PRIORITY 5
 /* Transfer buffer size */
 #define LPSPI1_BUFFER_SIZE 10
+/* Definition of peripheral ID */
+#define LPUART0_PERIPHERAL LPUART0
+/* Definition of the backround buffer size */
+#define LPUART0_BACKGROUND_BUFFER_SIZE 256
+/* LPUART0 interrupt vector ID (number). */
+#define LPUART0_SERIAL_RX_IRQN LPUART0_RX_IRQn
+/* LPUART0 interrupt vector priority. */
+#define LPUART0_SERIAL_RX_IRQ_PRIORITY 4
+/* LPUART0 interrupt vector ID (number). */
+#define LPUART0_SERIAL_TX_IRQN LPUART0_TX_IRQn
+/* LPUART0 interrupt vector priority. */
+#define LPUART0_SERIAL_TX_IRQ_PRIORITY 4
 
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
+extern const edma_config_t DMA_config;
 extern const flexcan_config_t CAN0_config;
 /* Message buffer 0 configuration structure */
 extern const flexcan_rx_mb_config_t CAN0_rx_mb_config_0;
@@ -63,6 +84,9 @@ extern lpspi_rtos_handle_t LPSPI0_handle;
 extern const lpspi_master_config_t LPSPI1_config;
 extern lpspi_transfer_t LPSPI1_transfer;
 extern lpspi_rtos_handle_t LPSPI1_handle;
+extern lpuart_rtos_handle_t LPUART0_rtos_handle;
+extern lpuart_handle_t LPUART0_lpuart_handle;
+extern lpuart_rtos_config_t LPUART0_rtos_config;
 
 /***********************************************************************************************************************
  * Initialization functions

@@ -138,8 +138,11 @@ outputs:
 - {id: LPO_clock.outFreq, value: 128 kHz}
 - {id: PCC.PCC_LPSPI0_CLK.outFreq, value: 10.5 MHz}
 - {id: PCC.PCC_LPSPI1_CLK.outFreq, value: 10.5 MHz}
+- {id: PCC.PCC_LPUART0_CLK.outFreq, value: 12 MHz}
 - {id: PLLDIV2_CLK.outFreq, value: 10.5 MHz}
+- {id: SIRCDIV2_CLK.outFreq, value: 8 MHz}
 - {id: SIRC_CLK.outFreq, value: 8 MHz}
+- {id: SOSCDIV2_CLK.outFreq, value: 12 MHz}
 - {id: SOSC_CLK.outFreq, value: 12 MHz}
 - {id: System_clock.outFreq, value: 168 MHz}
 - {id: TRACECLKIN.outFreq, value: 168 MHz}
@@ -148,9 +151,12 @@ settings:
 - {id: powerMode, value: HSRUN}
 - {id: PCC.PCC_LPSPI0_SEL.sel, value: SCG.PLLDIV2_CLK}
 - {id: PCC.PCC_LPSPI1_SEL.sel, value: SCG.PLLDIV2_CLK}
+- {id: PCC.PCC_LPUART0_SEL.sel, value: SCG.SOSCDIV2_CLK}
 - {id: SCG.DIVBUS.scale, value: '2'}
 - {id: SCG.DIVSLOW.scale, value: '7'}
 - {id: SCG.SCSSEL.sel, value: SCG.SPLL_DIV2_CLK}
+- {id: SCG.SIRCDIV2.scale, value: '1', locked: true}
+- {id: SCG.SOSCDIV2.scale, value: '1', locked: true}
 - {id: SCG.SPLLDIV2.scale, value: '16', locked: true}
 - {id: SCG.SPLL_mul.scale, value: '28'}
 - {id: SCG_SOSCCFG_OSC_MODE_CFG, value: ModeOscHighGain}
@@ -179,14 +185,14 @@ const scg_sosc_config_t g_scgSysOscConfig_BOARD_BootClockRUN =
         .enableMode = kSCG_SysOscEnable,          /* Enable System OSC clock */
         .monitorMode = kSCG_SysOscMonitorDisable, /* Monitor disabled */
         .div1 = kSCG_AsyncClkDisable,             /* System OSC Clock Divider 1: Clock output is disabled */
-        .div2 = kSCG_AsyncClkDisable,             /* System OSC Clock Divider 2: Clock output is disabled */
+        .div2 = kSCG_AsyncClkDivBy1,              /* System OSC Clock Divider 2: divided by 1 */
         .workMode = kSCG_SysOscModeOscHighGain,   /* Oscillator high gain */
     };
 const scg_sirc_config_t g_scgSircConfig_BOARD_BootClockRUN =
     {
         .enableMode = kSCG_SircEnable | kSCG_SircEnableInLowPower,/* Enable SIRC clock, Enable SIRC in low power mode */
         .div1 = kSCG_AsyncClkDisable,             /* Slow IRC Clock Divider 1: Clock output is disabled */
-        .div2 = kSCG_AsyncClkDisable,             /* Slow IRC Clock Divider 2: Clock output is disabled */
+        .div2 = kSCG_AsyncClkDivBy1,              /* Slow IRC Clock Divider 2: divided by 1 */
         .range = kSCG_SircRangeHigh,              /* Slow IRC high range clock (8 MHz) */
     };
 const scg_firc_config_t g_scgFircConfig_BOARD_BootClockRUN =
@@ -246,5 +252,7 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetIpSrc(kCLOCK_Lpspi0, kCLOCK_IpSrcSysPllAsync);
     /* Set PCC LPSPI1 selection */
     CLOCK_SetIpSrc(kCLOCK_Lpspi1, kCLOCK_IpSrcSysPllAsync);
+    /* Set PCC LPUART0 selection */
+    CLOCK_SetIpSrc(kCLOCK_Lpuart0, kCLOCK_IpSrcSysOscAsync);
 }
 
