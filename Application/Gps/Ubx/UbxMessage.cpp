@@ -9,7 +9,7 @@
 std::vector<uint8_t> UbxMessage::Serialize()
 {
     std::vector<uint8_t> data(Payload.size() + 8, 0);
-    std::vector<uint8_t> initData{0xB5, 0x62, static_cast<uint8_t>(MsgClass), MsgSubclass, static_cast<uint8_t>(Payload.size()), static_cast<uint8_t>(Payload.size() >> 8)};
+    std::vector<uint8_t> initData{0xB5, 0x62, MsgClass, MsgSubclass, static_cast<uint8_t>(Payload.size()), static_cast<uint8_t>(Payload.size() >> 8)};
     std::copy(initData.begin(), initData.end(), data.begin());
     std::copy(Payload.begin(), Payload.end(), data.begin() + 6);
 
@@ -27,7 +27,7 @@ bool UbxMessage::Deserialize(std::vector<uint8_t> data)
     {
         if (CheckChecksum(data))
         {
-            MsgClass = static_cast<MsgClassEnum>(data[2]);
+            MsgClass = data[2];
             MsgSubclass = data[3];
             Payload = {data.begin() + 6, data.end() - 2};
             validFrame = true;
@@ -38,12 +38,12 @@ bool UbxMessage::Deserialize(std::vector<uint8_t> data)
 
 UbxMessage::UbxMessage()
 {
-    MsgClass = static_cast<MsgClassEnum>(0);
+    MsgClass = 0;
     MsgSubclass = 0;
     Payload = std::vector<uint8_t>{};
 }
 
-UbxMessage::UbxMessage(UbxMessage::MsgClassEnum msgClass, uint8_t msgSubclass, std::vector<uint8_t> payload)
+UbxMessage::UbxMessage(uint8_t msgClass, uint8_t msgSubclass, std::vector<uint8_t> payload)
 {
     MsgClass = msgClass;
     MsgSubclass = msgSubclass;

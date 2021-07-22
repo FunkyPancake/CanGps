@@ -2,22 +2,21 @@
 // Created by PC on 15.05.2021.
 //
 
-#ifndef CANGPS_GPS_H
-#define CANGPS_GPS_H
+#pragma once
+
 
 #include <cstdint>
 
 class Gps
 {
   public:
-    float Latitude;
-    float Longitude;
-    float Speed;
-    float Altitude;
-    float Course;
+    float Latitude_deg;
+    float Longitude_deg;
+    float Speed_mps;
+    float Altitude_m;
+    float Course_deg;
     uint8_t Noise;
     uint8_t SateliteNumber;
     uint8_t Status;
 };
 
-#endif//CANGPS_GPS_H

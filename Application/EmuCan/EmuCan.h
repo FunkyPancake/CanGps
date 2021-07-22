@@ -20,7 +20,7 @@ private:
     uint32_t baseId;
     int16_t ScaleImu(float data);
     uint16_t ScaleHeading(float heading);
-    int32_t ScaleCoord(float coord);
+    uint32_t ScaleCoord(float coord);
 public:
     EmuCan(Gps &gps, Imu &imu, ICan *can, uint32_t baseId);
     void SendFrames();

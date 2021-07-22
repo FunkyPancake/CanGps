@@ -22,7 +22,7 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
 {
     (void)pvParameters;
     TickType_t xLastWakeTime;
-    const TickType_t xFrequency = 25;
+    const TickType_t xFrequency = 40;
     xLastWakeTime = xTaskGetTickCount();
     LpSpiRtos sbcSpi{&LPSPI0_handle};
     LpUart uartGps{&LPUART0_rtos_handle,LPUART0_rtos_config.srcclk};
@@ -33,14 +33,15 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
     EmuCan emuCan(gps, imu, &can, 0x400);
     sbc.Init();
 //    sbc.ConfigWatchdog();
+    vTaskDelayUntil(&xLastWakeTime, 500);
     gps.Config();
     imu.Config();
     for (;;)
     {
         gps.GetData();
-//        imu.GetData();
-//        emuCan.SendFrames();
-//        sbc.RefreshWatchdog();
+        imu.GetData();
+        emuCan.SendFrames();
+        sbc.RefreshWatchdog();
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
 }

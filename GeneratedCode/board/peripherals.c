@@ -433,7 +433,7 @@ lpuart_handle_t LPUART0_lpuart_handle;
 uint8_t LPUART0_background_buffer[LPUART0_BACKGROUND_BUFFER_SIZE];
 lpuart_rtos_config_t LPUART0_rtos_config = {
   .base = LPUART0_PERIPHERAL,
-  .baudrate = 38400UL,
+  .baudrate = 115200UL,
   .srcclk = 12000000UL,
   .parity = kLPUART_ParityDisabled,
   .stopbits = kLPUART_OneStopBit,

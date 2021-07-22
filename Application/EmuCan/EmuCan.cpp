@@ -9,15 +9,15 @@ void EmuCan::SendFrames()
 {
     {
         ICan::Payload buf{};
-        buf.dw[0] = static_cast<uint32_t>(ScaleCoord(gps.Latitude));
-        buf.dw[1] = static_cast<uint32_t>(ScaleCoord(gps.Longitude));
-        
+        buf.dw[0] = ScaleCoord(gps.Latitude_deg);
+        buf.dw[1] = ScaleCoord(gps.Longitude_deg);
+
         can->Send(baseId, buf, 8);
     }
     {
         ICan::Payload buf{};
-        buf.w[0] = static_cast<uint16_t>(gps.Speed),
-        buf.w[1] = static_cast<uint16_t>(gps.Altitude),
+        buf.w[0] = static_cast<uint16_t>((int16_t)(gps.Speed_mps*3.6f)),
+        buf.w[1] = static_cast<uint16_t>((int16_t)(gps.Altitude_m)),
         buf.b[4] = gps.Noise,
         buf.b[5] = gps.SateliteNumber,
         buf.b[6] = frameCounter,
@@ -26,8 +26,8 @@ void EmuCan::SendFrames()
     }
     {
         ICan::Payload buf{};
-        buf.w[0] = (ScaleHeading(gps.Course)),
-        buf.w[1] = (ScaleHeading(gps.Course)),
+        buf.w[0] = (ScaleHeading(gps.Course_deg)),
+        buf.w[1] = (ScaleHeading(gps.Course_deg)),
         buf.w[2] = static_cast<uint16_t>(ScaleImu(imu.Xyaw)),
         buf.w[3] = static_cast<uint16_t>(ScaleImu(imu.Yyaw)),
             can->Send(baseId + 2, buf, 8);
@@ -45,12 +45,12 @@ void EmuCan::SendFrames()
 
 uint16_t EmuCan::ScaleHeading(float heading)
 {
-    return 0;
+    return (uint16_t)heading;
 }
 
-int32_t EmuCan::ScaleCoord(float coord)
+uint32_t EmuCan::ScaleCoord(float coord)
 {
-    return coord / 10e7;
+    return ((int32_t)(coord * 1e7f));
 }
 
 int16_t EmuCan::ScaleImu(float data)
