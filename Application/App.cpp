@@ -33,7 +33,7 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
     EmuCan emuCan(gps, imu, &can, 0x400);
     sbc.Init();
 //    sbc.ConfigWatchdog();
-    vTaskDelayUntil(&xLastWakeTime, 500);
+    vTaskDelayUntil(&xLastWakeTime, 1250);
     gps.Config();
     imu.Config();
     for (;;)

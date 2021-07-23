@@ -11,7 +11,6 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         EmuCan/EmuCan.cpp
         App.cpp
         Imu/Imu.cpp
-        NeoM9N/NeoM9N.cpp
         main.cpp
         )
 
@@ -20,7 +19,6 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         PUBLIC
         .
         Imu
-        NeoM9N
         EmuCan
     )
 elseif (CMAKE_BUILD_TYPE MATCHES Test)

@@ -4,34 +4,17 @@
 
 #include <algorithm>
 #include "GpsUbx.h"
-#include "UbxMessage.h"
 #include <array>
 
-uint32_t GpsUbx::ParseU32(uint8_t *rawData)
+
+
+
+GpsUbx::GpsUbx(ICom *com)
 {
-    return *(uint32_t *) rawData;
+    _com = com;
 }
 
-bool GpsUbx::ParseMessage(std::vector<uint8_t> message)
+bool GpsUbx::CheckAck(UbxTp &msg, uint8_t msgClass, uint8_t msgSubclass)
 {
-    UbxMessage msg = UbxMessage();
-    if (msg.Deserialize(message))
-    {
-        if (msg.MsgClass == NAV && msg.MsgSubclass == NAV_PVT)
-        {
-            Status = msg.Payload[20];
-            SateliteNumber = msg.Payload[23];
-            Longitude_deg = (float)ParseU32(msg.Payload.data() + 24) / 1e7f;//*(float*)(msg.Payload.data()+24);
-            Latitude_deg = (float)ParseU32(msg.Payload.data() + 28) / 1e7f;
-            Altitude_m = (float)ParseU32(msg.Payload.data() + 36)/1e3f;
-            Speed_mps = (float)ParseU32(msg.Payload.data() + 60)/1e3f;
-            Course_deg = (float)ParseU32(msg.Payload.data()+64)/1e5f;
-        }
-    }
-    return false;
+    return msg.GetPackedData() == std::vector<uint8_t>{0x05, 0x01, msgClass, msgSubclass};
 }
-
-GpsUbx::GpsUbx()
-{
-}
-

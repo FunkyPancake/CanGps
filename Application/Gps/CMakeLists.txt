@@ -6,9 +6,9 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 
     target_sources(${TARGET_NAME}
         PRIVATE
-        Gps.cpp
         Ubx/GpsUbx.cpp
-        Ubx/UbxMessage.cpp
+        Ubx/UbxTp.cpp
+        NeoM9N/NeoM9N.cpp
         )
 
 
@@ -17,15 +17,14 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         PUBLIC
         .
         Ubx
+        NeoM9N
     )
 elseif (CMAKE_BUILD_TYPE MATCHES Test)
     target_sources(Utest
         PRIVATE
-        Test/TestUbxMessage.cpp
-        Test/TestUbx.cpp
-        Gps.cpp
+        Test/TestUbxTp.cpp
         Ubx/GpsUbx.cpp
-        ubx/UbxMessage.cpp
+        Ubx/UbxTp.cpp
         )
 
 
@@ -34,6 +33,7 @@ elseif (CMAKE_BUILD_TYPE MATCHES Test)
         PUBLIC
         .
         Ubx
+        NeoM9N
     )
 endif ()
 

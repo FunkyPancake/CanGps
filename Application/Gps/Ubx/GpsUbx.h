@@ -3,26 +3,38 @@
 //
 #pragma once
 
-
 #include "Gps.h"
 #include <cstdint>
 #include <vector>
 #include <array>
-#include <map>
-#include "UbxMessage.h"
-class GpsUbx : public Gps
+#include "UbxTp.h"
+#include <ICom.h>
+
+class GpsUbx
 {
 private:
-    typedef double (GpsUbx::*math_method_t)(UbxMessage);
-    typedef std::map<int, int> math_func_map_t;
-    const math_func_map_t mapping = {
-        {1,10},
-    };
-//    uint32_t ParseU32(std::vector<uint8_t> rawData);
-    uint32_t ParseU32(uint8_t* rawData);
+    bool CheckAck(UbxTp &msg, uint8_t msgClass, uint8_t msgSubclass);
 
-public:
-    enum MsgClass
+protected:
+    
+    ICom *_com;
+    //Uart config
+    const uint32_t CfgUart1InProtUbx = 0x10730001;
+    const uint32_t CfgUart1OutProtUbx = 0x10740001;
+    const uint32_t CfgUart1OutProtNmea = 0x10740002;
+    //Output rate
+    const uint32_t CfgMsgoutUbxNavPvtUart1 = 0x20910007;
+    const uint32_t CfgRateMeas = 0x30210001;
+    const uint32_t CfgUart1Baudrate = 0x40520001;
+    //Odometer registers
+    const uint32_t CfgOdoUseOdo = 0x10220001;
+    const uint32_t CfgOdoProfile = 0x20220005;
+    
+    typedef enum
+    {
+        Ram = 1, Bbr = 2, Flash = 3
+    } LayerLevel;
+    typedef enum
     {
         NAV = 0x01,
         RXM = 0x02,
@@ -37,10 +49,9 @@ public:
         LOG = 0x21,
         SEC = 0x27,
         HNR = 0x28
-    };
-    bool ParseMessage(std::vector<uint8_t> message);
-//private:
-    enum
+    } MsgClass;
+public:
+    typedef enum
     {
         NAV_AOPSTATUS,
         NAV_ATT,
@@ -55,14 +66,19 @@ public:
         NAV_HPPOSLLH,
         NAV_PVT = 7,
     } NavClass;
-    enum
-    {
-        ACK_ACK = 0x01,
-        ACK_NAK = 0x00
-    } AckClass;
-    enum
-    {
     
-    } CfgClass;
-    GpsUbx();
+    template<typename T> bool ValSet(uint32_t key, T data, LayerLevel layer = Ram)
+    {
+        std::vector<uint8_t> payload(8 + sizeof(T), 0);
+        payload[1] = layer;
+        *(uint32_t *) (payload.data() + 4) = key;
+        *(T *) (payload.data() + 8) = data;
+        
+        std::vector<uint8_t> req = UbxTp(GpsUbx::CFG, 0x8a, payload).Serialize();
+        _com->WriteBytes(req);
+        auto resp = UbxTp::Deserialize(_com->ReadBytes(10));
+        return CheckAck(resp, GpsUbx::CFG, 0x8a);
+    }
+    
+    explicit GpsUbx(ICom *com);
 };

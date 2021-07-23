@@ -51,6 +51,11 @@ elseif (CMAKE_BUILD_TYPE MATCHES Test)
         Utest
         null.cpp
         )
+    target_include_directories(
+        Utest
+        PUBLIC
+        KeCommon/Interfaces
+    )
     target_link_libraries(
         Utest
         gtest_main

@@ -11,13 +11,12 @@
 #include <ICom.h>
 #include <LpUart.h>
 
-class NeoM9N : public GpsUbx
+class NeoM9N : public GpsUbx, public Gps
 {
 private:
-    LpUart *_com;
+    uint32_t GetU32Value(uint8_t *rawData);
 public:
-//    NeoM9N(ICom* comIf);
-    NeoM9N(LpUart *com);
+    explicit NeoM9N(ICom *com);
     bool GetData();
     void Config();
 };
