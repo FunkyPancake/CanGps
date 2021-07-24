@@ -31,11 +31,11 @@ bool NeoM9N::GetData()
     return true;
 }
 
-uint32_t NeoM9N::GetU32Value(uint8_t *rawData)
+uint32_t NeoM9N::GetU32Value(const uint8_t *rawData)
 {
     return *(uint32_t *) rawData;
 }
 
-NeoM9N::NeoM9N(ICom *com) : GpsUbx(com)
+NeoM9N::NeoM9N(ICom *com) : GpsUbx(com), Gps()
 {
 }

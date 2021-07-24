@@ -48,7 +48,7 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
 
 void App()
 {
-    if (xTaskCreate(app_task, "app_task", configMINIMAL_STACK_SIZE + 1000, nullptr, app_task_PRIORITY, nullptr)
+    if (xTaskCreate(app_task, "app_task", configMINIMAL_STACK_SIZE + 256, nullptr, app_task_PRIORITY, nullptr)
         != pdPASS)
     {
         while (true)

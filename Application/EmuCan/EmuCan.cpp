@@ -55,7 +55,7 @@ uint32_t EmuCan::ScaleCoord(float coord)
 
 int16_t EmuCan::ScaleImu(float data)
 {
-    return data / 100;
+    return (int16_t)(data / 100.0f);
 }
 
 EmuCan::EmuCan(Gps &gps, Imu &imu, ICan *can, uint32_t baseId = 0x400) : gps(gps), imu(imu)

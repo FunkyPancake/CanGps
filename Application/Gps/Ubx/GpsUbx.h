@@ -16,7 +16,6 @@ private:
     bool CheckAck(UbxTp &msg, uint8_t msgClass, uint8_t msgSubclass);
 
 protected:
-    
     ICom *_com;
     //Uart config
     const uint32_t CfgUart1InProtUbx = 0x10730001;
@@ -50,7 +49,6 @@ protected:
         SEC = 0x27,
         HNR = 0x28
     } MsgClass;
-public:
     typedef enum
     {
         NAV_AOPSTATUS,
@@ -78,6 +76,7 @@ public:
         _com->WriteBytes(req);
         auto resp = UbxTp::Deserialize(_com->ReadBytes(10));
         return CheckAck(resp, GpsUbx::CFG, 0x8a);
+        
     }
     
     explicit GpsUbx(ICom *com);

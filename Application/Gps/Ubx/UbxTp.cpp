@@ -4,8 +4,6 @@
 
 #include "UbxTp.h"
 
-#include <utility>
-
 std::vector<uint8_t> UbxTp::Serialize()
 {
     std::vector<uint8_t> data(Payload.size() + 8, 0);
@@ -29,7 +27,7 @@ std::vector<uint8_t> UbxTp::Serialize()
 
 UbxTp UbxTp::Deserialize(std::vector<uint8_t> data)
 {
-    auto obj= UbxTp();
+    auto obj = UbxTp();
     if (data.size() > 8 && (data[0] == 0xB5) && (data[1] == 0x62))
     {
         if (CheckChecksum(data))

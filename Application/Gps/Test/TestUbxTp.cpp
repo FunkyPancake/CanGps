@@ -4,7 +4,6 @@
 
 #include <UbxTp.h>
 #include <gtest/gtest.h>
-#include <vector>
 // Demonstrate some basic assertions.
 
 TEST(UbxTp, Serialize)
@@ -26,4 +25,10 @@ TEST(UbxTp, Deserialize)
     EXPECT_EQ(ubx.MsgClass, 0x06);
     EXPECT_EQ(ubx.MsgSubclass, 0x08);
     EXPECT_EQ(ubx.Payload, expectedPayload);
+}
+TEST(UbxTp, GetPackedData)
+{
+    auto ubx = UbxTp(1,2,{1,2,3,4});
+    std::vector<uint8_t> expected = {1,2,1,2,3,4};
+    EXPECT_EQ(ubx.GetPackedData(),expected);
 }

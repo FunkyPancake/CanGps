@@ -4,10 +4,6 @@
 
 #include <algorithm>
 #include "GpsUbx.h"
-#include <array>
-
-
-
 
 GpsUbx::GpsUbx(ICom *com)
 {

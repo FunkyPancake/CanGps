@@ -9,12 +9,11 @@
 #include <cstdint>
 #include <GpsUbx.h>
 #include <ICom.h>
-#include <LpUart.h>
 
 class NeoM9N : public GpsUbx, public Gps
 {
 private:
-    uint32_t GetU32Value(uint8_t *rawData);
+    static uint32_t GetU32Value(const uint8_t *rawData);
 public:
     explicit NeoM9N(ICom *com);
     bool GetData();

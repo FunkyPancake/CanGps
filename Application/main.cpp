@@ -58,7 +58,7 @@
 
  */
 
-int main(void)
+int main()
 {
     /* Init board hardware. */
     BOARD_InitBootPins();
@@ -69,7 +69,7 @@ int main(void)
     vTaskStartScheduler();
     /* Enter an infinite loop, just incrementing a counter. */
     
-    while (1)
+    while (true)
     {
     }
     
