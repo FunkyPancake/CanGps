@@ -17,17 +17,18 @@ private:
 
 protected:
     ICom *_com;
-    //Uart config
-    const uint32_t CfgUart1InProtUbx = 0x10730001;
-    const uint32_t CfgUart1OutProtUbx = 0x10740001;
-    const uint32_t CfgUart1OutProtNmea = 0x10740002;
-    //Output rate
-    const uint32_t CfgMsgoutUbxNavPvtUart1 = 0x20910007;
-    const uint32_t CfgRateMeas = 0x30210001;
-    const uint32_t CfgUart1Baudrate = 0x40520001;
-    //Odometer registers
-    const uint32_t CfgOdoUseOdo = 0x10220001;
-    const uint32_t CfgOdoProfile = 0x20220005;
+    typedef enum
+    {
+        CfgUart1InProtUbx = 0x10730001UL,
+        CfgUart1OutProtUbx = 0x10740001UL,
+        CfgUart1OutProtNmea = 0x10740002UL,
+        CfgMsgoutUbxNavPvtUart1 = 0x20910007UL,
+        CfgRateMeas = 0x30210001UL,
+        CfgUart1Baudrate = 0x40520001UL,
+        CfgOdoUseOdo = 0x10220001UL,
+        CfgOdoProfile = 0x20220005UL,
+    }UbxValRegisters;
+    std::vector<uint8_t> ReadMessage();
     
     typedef enum
     {
