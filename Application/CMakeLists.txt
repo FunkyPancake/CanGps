@@ -9,6 +9,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
     target_sources(${TARGET_NAME}.elf
         PRIVATE
         EmuCan/EmuCan.cpp
+        SyvecsCan/SyvecsCan.cpp
         App.cpp
         Imu/Imu.cpp
         main.cpp
@@ -20,6 +21,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         .
         Imu
         EmuCan
+        SyvecsCan
     )
 elseif (CMAKE_BUILD_TYPE MATCHES Test)
 

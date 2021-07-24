@@ -20,13 +20,17 @@ bool NeoM9N::GetData()
     auto msg = UbxTp::Deserialize(_com->ReadBytes(100));
     if (msg.MsgClass == NAV && msg.MsgSubclass == NAV_PVT)
     {
+        
         Status = msg.Payload[20];
-        SateliteNumber = msg.Payload[23];
-        Longitude_deg = (float) GetU32Value(msg.Payload.data() + 24) / 1e7f;
-        Latitude_deg = (float) GetU32Value(msg.Payload.data() + 28) / 1e7f;
-        Altitude_m = (float) GetU32Value(msg.Payload.data() + 36) / 1e3f;
-        Speed_mps = (float) GetU32Value(msg.Payload.data() + 60) / 1e3f;
-        Course_deg = (float) GetU32Value(msg.Payload.data() + 64) / 1e5f;
+        if(Status >1)
+        {
+            SateliteNumber = msg.Payload[23];
+            Longitude_deg = (float) GetU32Value(msg.Payload.data() + 24) / 1e7f;
+            Latitude_deg = (float) GetU32Value(msg.Payload.data() + 28) / 1e7f;
+            Altitude_m = (float) GetU32Value(msg.Payload.data() + 36) / 1e3f;
+            Speed_mps = (float) GetU32Value(msg.Payload.data() + 60) / 1e3f;
+            Course_deg = (float) GetU32Value(msg.Payload.data() + 64) / 1e5f;
+        }
     }
     return true;
 }

@@ -7,6 +7,7 @@
 #include "peripherals.h"
 #include <LpSpi.h>
 #include <Tle9461.h>
+#include <SyvecsCan.h>
 
 #include "LpUart.h"
 #include "EmuCan.h"
@@ -31,6 +32,7 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
     Imu imu{};
     NeoM9N gps{&uartGps};
     EmuCan emuCan(gps, imu, &can, 0x400);
+    SyvecsCan syvecsCan(gps,&can);
     sbc.Init();
 //    sbc.ConfigWatchdog();
     vTaskDelayUntil(&xLastWakeTime, 1250);
@@ -41,8 +43,10 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
         gps.GetData();
         imu.GetData();
         emuCan.SendFrames();
+        syvecsCan.SendFrames();
         sbc.RefreshWatchdog();
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
+        
     }
 }
 
