@@ -16,14 +16,11 @@ private:
     int _baseId;
     ICan *_can;
     Gps &_gps;
-    static int32_t DegToMin(float coord);
-    static int16_t MpsToKmh(float speed);
-    template <typename T> T SwapBytes(T data){
-        std::array<uint8_t,sizeof(T)> tmp{};
-        *(T*)tmp.data() = data;
-        std::reverse(tmp.begin(),tmp.end());
-        return *(T*) tmp.data();
-    }
+    
+    static int32_t ScaleCoord(float coord);
+    static int16_t ScaleSpeed(float speed);
+    template<typename T> T SwapBytes(T data);
+
 public:
     SyvecsCan(Gps &gps, ICan *can, uint32_t baseId = 0x680);
     void SendFrames();

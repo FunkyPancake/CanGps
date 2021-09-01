@@ -19,15 +19,16 @@ protected:
     ICom *_com;
     typedef enum
     {
+        CfgOdoUseOdo = 0x10220001UL,
         CfgUart1InProtUbx = 0x10730001UL,
         CfgUart1OutProtUbx = 0x10740001UL,
         CfgUart1OutProtNmea = 0x10740002UL,
+        CfgNavSpgDynmodel = 0x20110021,
+        CfgOdoProfile = 0x20220005UL,
         CfgMsgoutUbxNavPvtUart1 = 0x20910007UL,
         CfgRateMeas = 0x30210001UL,
         CfgUart1Baudrate = 0x40520001UL,
-        CfgOdoUseOdo = 0x10220001UL,
-        CfgOdoProfile = 0x20220005UL,
-    }UbxValRegisters;
+    } UbxValRegisters;
     std::vector<uint8_t> ReadMessage();
     
     typedef enum

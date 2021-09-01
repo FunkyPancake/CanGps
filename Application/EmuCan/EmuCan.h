@@ -21,6 +21,7 @@ private:
     static int16_t ScaleImu(float data);
     static uint16_t ScaleHeading(float heading);
     static uint32_t ScaleCoord(float coord);
+    template <typename T> T SwapBytes(T data);
 public:
     EmuCan(Gps &gps, Imu &imu, ICan *can, uint32_t baseId);
     void SendFrames();

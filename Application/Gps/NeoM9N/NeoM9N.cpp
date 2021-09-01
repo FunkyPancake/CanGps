@@ -11,6 +11,7 @@ void NeoM9N::Config()
     _com->SetBaudrate(115200);
     ValSet<bool>(CfgUart1OutProtNmea, false);
     ValSet<bool>(CfgUart1OutProtUbx, true);
+    ValSet<uint8_t>(CfgNavSpgDynmodel, 4);
     ValSet<uint8_t>(CfgMsgoutUbxNavPvtUart1, 1);
     ValSet<uint16_t>(CfgRateMeas, 40);
 }
@@ -20,9 +21,8 @@ bool NeoM9N::GetData()
     auto msg = UbxTp::Deserialize(_com->ReadBytes(100));
     if (msg.MsgClass == NAV && msg.MsgSubclass == NAV_PVT)
     {
-        
         Status = msg.Payload[20];
-        if(Status >1)
+        if (Status > 1)
         {
             SateliteNumber = msg.Payload[23];
             Longitude_deg = (float) GetU32Value(msg.Payload.data() + 24) / 1e7f;

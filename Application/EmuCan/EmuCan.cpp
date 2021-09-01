@@ -3,21 +3,23 @@
 //
 
 #include <Imu.h>
+#include <array>
 #include "EmuCan.h"
+#include <algorithm>
 
 void EmuCan::SendFrames()
 {
     {
         ICan::Payload buf{};
-        buf.dw[0] = ScaleCoord(gps.Latitude_deg);
-        buf.dw[1] = ScaleCoord(gps.Longitude_deg);
+        buf.dw[0] = SwapBytes<int32_t>(ScaleCoord(gps.Latitude_deg));
+        buf.dw[1] = SwapBytes<int32_t>(ScaleCoord(gps.Longitude_deg));
         
         can->Send(baseId, buf, 8);
     }
     {
         ICan::Payload buf{};
-        buf.w[0] = static_cast<uint16_t>((int16_t) (gps.Speed_mps * 3.6f));
-        buf.w[1] = static_cast<uint16_t>((int16_t) (gps.Altitude_m));
+        buf.w[0] = SwapBytes<int16_t>((int16_t) (gps.Speed_mps * 100.0f));
+        buf.w[1] = SwapBytes<int16_t>((int16_t) (gps.Altitude_m));
         buf.b[4] = gps.Noise;
         buf.b[5] = gps.SateliteNumber;
         buf.b[6] = frameCounter;
@@ -26,9 +28,9 @@ void EmuCan::SendFrames()
     }
     {
         ICan::Payload buf{};
-        buf.w[2] = static_cast<uint16_t>(ScaleImu(imu.Xyaw));
         buf.w[0] = (ScaleHeading(gps.Course_deg));
         buf.w[1] = (ScaleHeading(gps.Course_deg));
+        buf.w[2] = static_cast<uint16_t>(ScaleImu(imu.Xyaw));
         buf.w[3] = static_cast<uint16_t>(ScaleImu(imu.Yyaw));
         can->Send(baseId + 2, buf, 8);
     }
@@ -63,4 +65,14 @@ EmuCan::EmuCan(Gps &gps, Imu &imu, ICan *can, uint32_t baseId = 0x400) : gps(gps
     frameCounter = 0;
     this->can = can;
     this->baseId = baseId;
+}
+
+template<typename T> T EmuCan::SwapBytes(T data)
+{
+    {
+        std::array<uint8_t, sizeof(T)> tmp{};
+        *(T *) tmp.data() = data;
+        std::reverse(tmp.begin(), tmp.end());
+        return *(T *) tmp.data();
+    }
 }
