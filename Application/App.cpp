@@ -10,9 +10,9 @@
 #include <SyvecsCan.h>
 
 #include "LpUart.h"
-#include "EmuCan.h"
+//#include "EmuCan.h"
 #include "FlexCan.h"
-#include "Imu.h"
+//#include "Imu.h"
 #include "NeoM9N.h"
 
 const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
@@ -21,28 +21,32 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
 
 [[noreturn]] static void app_task(void *pvParameters)
 {
-    (void)pvParameters;
+    (void) pvParameters;
     TickType_t xLastWakeTime;
     const TickType_t xFrequency = 40;
     xLastWakeTime = xTaskGetTickCount();
     LpSpiRtos sbcSpi{&LPSPI0_handle};
-    LpUart uartGps{&LPUART0_rtos_handle,LPUART0_rtos_config.srcclk};
+    LpUart uartGps{&LPUART0_rtos_handle, LPUART0_rtos_config.srcclk};
     Tle9461 sbc{&sbcSpi};
     FlexCan can{16};
-    Imu imu{};
+//    Imu imu{};
     NeoM9N gps{&uartGps};
-    EmuCan emuCan(gps, imu, &can, 0x400);
-    SyvecsCan syvecsCan(gps,&can);
+//    EmuCan emuCan(gps, imu, &can, 0x400);
+    SyvecsCan syvecsCan(gps, &can);
     sbc.Init();
-//    sbc.ConfigWatchdog();
-    vTaskDelayUntil(&xLastWakeTime, 1250);
+    sbc.ConfigWatchdog(Tle9461::WgTimer200ms);
+    for (int i = 0; i < 13; i++)
+    {
+        vTaskDelayUntil(&xLastWakeTime, 100);
+        sbc.RefreshWatchdog();
+    }
     gps.Config();
-    imu.Config();
+//    imu.Config();
     for (;;)
     {
         gps.GetData();
-        imu.GetData();
-        emuCan.SendFrames();
+//        imu.GetData();
+//        emuCan.SendFrames();
         syvecsCan.SendFrames();
         sbc.RefreshWatchdog();
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
@@ -55,7 +59,6 @@ void App()
     if (xTaskCreate(app_task, "app_task", configMINIMAL_STACK_SIZE + 256, nullptr, app_task_PRIORITY, nullptr)
         != pdPASS)
     {
-        while (true)
-            ;
+        while (true);
     }
 }
