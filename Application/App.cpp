@@ -3,17 +3,16 @@
 //
 
 #include "App.h"
-#include "FreeRTOS.h"
 #include "peripherals.h"
-#include <LpSpi.h>
-#include <Tle9461.h>
-#include <SyvecsCan.h>
-
+#include "FreeRTOS.h"
+#include "LpSpi.h"
 #include "LpUart.h"
-//#include "EmuCan.h"
 #include "FlexCan.h"
-//#include "Imu.h"
 #include "NeoM9N.h"
+#include "Tle9461.h"
+#include "ICanStream.h"
+#include "SyvecsCan.h"
+
 
 const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
 
@@ -25,32 +24,35 @@ const UBaseType_t app_task_PRIORITY = (configMAX_PRIORITIES - 1);
     TickType_t xLastWakeTime;
     const TickType_t xFrequency = 40;
     xLastWakeTime = xTaskGetTickCount();
+    
+    //sbc init
     LpSpiRtos sbcSpi{&LPSPI0_handle};
-    LpUart uartGps{&LPUART0_rtos_handle, LPUART0_rtos_config.srcclk};
     Tle9461 sbc{&sbcSpi};
-    FlexCan can{16};
-//    Imu imu{};
-    NeoM9N gps{&uartGps};
-//    EmuCan emuCan(gps, imu, &can, 0x400);
-    SyvecsCan syvecsCan(gps, &can);
     sbc.Init();
     sbc.ConfigWatchdog(Tle9461::WgTimer200ms);
+    
+    //gps init
+    LpUart uartGps{&LPUART0_rtos_handle, &LPUART0_rtos_config};
+    NeoM9N gps{&uartGps};
+    
+    //can init
+    FlexCan can{16};
+    auto canStream = SyvecsCan(gps,&can);
+
+    //wait for gps to wake
     for (int i = 0; i < 13; i++)
     {
         vTaskDelayUntil(&xLastWakeTime, 100);
         sbc.RefreshWatchdog();
     }
     gps.Config();
-//    imu.Config();
+
     for (;;)
     {
         gps.GetData();
-//        imu.GetData();
-//        emuCan.SendFrames();
-        syvecsCan.SendFrames();
+        canStream.SendFrames();
         sbc.RefreshWatchdog();
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
-        
     }
 }
 

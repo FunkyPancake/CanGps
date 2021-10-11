@@ -8,10 +8,9 @@ add_subdirectory(Gps)
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     target_sources(${TARGET_NAME}.elf
         PRIVATE
-        EmuCan/EmuCan.cpp
-        SyvecsCan/SyvecsCan.cpp
+        CanStream/EmuCan/EmuCan.cpp
+        CanStream/SyvecsCan/SyvecsCan.cpp
         App.cpp
-        Imu/Imu.cpp
         main.cpp
         )
 
@@ -19,9 +18,9 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         ${TARGET_NAME}.elf
         PUBLIC
         .
-        Imu
-        EmuCan
-        SyvecsCan
+        CanStream/EmuCan
+        CanStream/SyvecsCan
+        Interfaces
     )
 elseif (CMAKE_BUILD_TYPE MATCHES Test)
 

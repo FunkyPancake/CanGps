@@ -2,7 +2,6 @@
 // Created by PC on 23.05.2021.
 //
 
-#include <array>
 #include "SyvecsCan.h"
 
 void SyvecsCan::SendFrames()
@@ -34,14 +33,5 @@ int16_t SyvecsCan::ScaleSpeed(float speed)
 SyvecsCan::SyvecsCan(Gps &gps, ICan *can, uint32_t baseId) : _gps(gps)
 {
     _can = can;
-    this->_baseId = baseId;
+    _baseId = baseId;
 }
-
-template<typename T> T SyvecsCan::SwapBytes(T data)
-{
-    std::array<uint8_t, sizeof(T)> tmp{};
-    *(T *) tmp.data() = data;
-    std::reverse(tmp.begin(), tmp.end());
-    return *(T *) tmp.data();
-}
-
