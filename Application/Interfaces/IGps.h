@@ -4,12 +4,11 @@
 
 #pragma once
 
-
 #include <cstdint>
 
-class Gps
+class IGps
 {
-  public:
+public:
     float Latitude_deg;
     float Longitude_deg;
     float Speed_mps;
@@ -18,5 +17,7 @@ class Gps
     uint8_t Noise;
     uint8_t SateliteNumber;
     uint8_t Status;
+    
+    virtual void GetData() = 0;
 };
 

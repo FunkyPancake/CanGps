@@ -3,6 +3,7 @@
 //
 
 #include <UbxTp.h>
+#include <UbxNavPvt.h>
 #include "NeoM9N.h"
 
 void NeoM9N::Config()
@@ -16,30 +17,22 @@ void NeoM9N::Config()
     ValSet<uint16_t>(CfgRateMeas, 40);
 }
 
-bool NeoM9N::GetData()
+void NeoM9N::GetData()
 {
-    auto msg = UbxTp::Deserialize(_com->ReadBytes(100));
-    if (msg.MsgClass == NAV && msg.MsgSubclass == NAV_PVT)
+    auto msg = UbxNavPvt(_com);
+    if(msg.GetFrame())
     {
-        Status = msg.Payload[20];
-        if (Status > 1)
-        {
-            SateliteNumber = msg.Payload[23];
-            Longitude_deg = (float) GetU32Value(msg.Payload.data() + 24) / 1e7f;
-            Latitude_deg = (float) GetU32Value(msg.Payload.data() + 28) / 1e7f;
-            Altitude_m = (float) GetU32Value(msg.Payload.data() + 36) / 1e3f;
-            Speed_mps = (float) GetU32Value(msg.Payload.data() + 60) / 1e3f;
-            Course_deg = (float) GetU32Value(msg.Payload.data() + 64) / 1e5f;
-        }
+        SateliteNumber = msg.SateliteNumber;
+        Longitude_deg = msg.Longitude_deg;
+        Latitude_deg = msg.Latitude_deg;
+        Altitude_m = msg.Altitude_m;
+        Speed_mps = msg.Speed_mps;
+        Course_deg = msg.Course_deg;
     }
-    return true;
 }
 
-uint32_t NeoM9N::GetU32Value(const uint8_t *rawData)
-{
-    return *(uint32_t *) rawData;
-}
 
-NeoM9N::NeoM9N(ICom *com) : GpsUbx(com), Gps()
+
+NeoM9N::NeoM9N(ICom *com) : UbxCfg(com), IGps()
 {
 }

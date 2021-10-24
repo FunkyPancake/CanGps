@@ -7,16 +7,15 @@
 
 #include <vector>
 #include <cstdint>
-#include <GpsUbx.h>
+#include <UbxCfg.h>
 #include <ICom.h>
+#include "../../Interfaces/IGps.h"
 
-class NeoM9N : public GpsUbx, public Gps
+class NeoM9N : public UbxCfg, public IGps
 {
-private:
-    static uint32_t GetU32Value(const uint8_t *rawData);
 public:
     explicit NeoM9N(ICom *com);
-    bool GetData();
+    void GetData();
     void Config();
 };
 

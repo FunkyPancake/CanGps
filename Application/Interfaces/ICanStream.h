@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <array>
 #include <algorithm>
-#include "Gps.h"
 #include "ICan.h"
 
 class ICanStream

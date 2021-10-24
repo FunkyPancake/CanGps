@@ -22,5 +22,6 @@ public:
     std::vector<uint8_t> Serialize();
     static UbxTp Deserialize(std::vector<uint8_t> data);
     std::vector<uint8_t> GetPackedData();
+    bool CheckAck(uint8_t msgClass, uint8_t subclass);
 };
 

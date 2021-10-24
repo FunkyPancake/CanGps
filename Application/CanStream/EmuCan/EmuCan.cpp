@@ -52,7 +52,7 @@ int32_t EmuCan::ScaleCoord(float coord)
     return ((int32_t) (coord * 1e7f));
 }
 
-EmuCan::EmuCan(Gps &gps, ICan *can, uint32_t baseId = 0x400) : _gps(gps)
+EmuCan::EmuCan(IGps &gps, ICan *can, uint32_t baseId = 0x400) : _gps(gps)
 {
     frameCounter = 0;
     _can = can;

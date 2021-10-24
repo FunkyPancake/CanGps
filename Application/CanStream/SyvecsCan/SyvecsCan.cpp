@@ -30,7 +30,7 @@ int16_t SyvecsCan::ScaleSpeed(float speed)
     return (int16_t) (speed * 36.0f);
 }
 
-SyvecsCan::SyvecsCan(Gps &gps, ICan *can, uint32_t baseId) : _gps(gps)
+SyvecsCan::SyvecsCan(IGps &gps, ICan *can, uint32_t baseId) : _gps(gps)
 {
     _can = can;
     _baseId = baseId;
