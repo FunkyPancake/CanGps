@@ -4,7 +4,7 @@ project(Gps LANGUAGES CXX C)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
 
-    target_sources(${TARGET_NAME}.elf
+    target_sources(${TARGET_NAME}
         PRIVATE
         Ubx/UbxCfg.cpp
         Ubx/UbxTp.cpp
@@ -14,7 +14,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 
 
     target_include_directories(
-        ${TARGET_NAME}.elf
+        ${TARGET_NAME}
         PUBLIC
         .
         Ubx

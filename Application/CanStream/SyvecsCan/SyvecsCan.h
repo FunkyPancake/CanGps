@@ -5,6 +5,7 @@
 #pragma once
 
 #include <Interfaces/ICanStream.h>
+#include <IGps.h>
 
 class SyvecsCan : public ICanStream
 {

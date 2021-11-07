@@ -6,7 +6,7 @@ project(Application LANGUAGES CXX C)
 add_subdirectory(Gps)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    target_sources(${TARGET_NAME}.elf
+    target_sources(${TARGET_NAME}
         PRIVATE
         CanStream/EmuCan/EmuCan.cpp
         CanStream/SyvecsCan/SyvecsCan.cpp
@@ -15,7 +15,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         )
 
     target_include_directories(
-        ${TARGET_NAME}.elf
+        ${TARGET_NAME}
         PUBLIC
         .
         CanStream/EmuCan

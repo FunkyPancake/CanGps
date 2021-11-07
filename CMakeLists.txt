@@ -7,21 +7,21 @@ set(CMAKE_CXX_STANDARD 11)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
 
-    add_executable(${TARGET_NAME}.elf
+    add_executable(${TARGET_NAME}
         null.cpp)
 
     add_subdirectory(GeneratedCode)
 
     add_subdirectory(KeCommon)
 
-    target_link_libraries(${TARGET_NAME}.elf KeCommon)
+    target_link_libraries(${TARGET_NAME} KeCommon)
 
-    target_compile_options(${TARGET_NAME}.elf PRIVATE
+    target_compile_options(${TARGET_NAME} PRIVATE
         -O0 -fno-common -g3 -Wall -c -ffunction-sections -fno-rtti -fdata-sections -ffreestanding
         -fno-builtin -fno-exceptions -fmerge-constants -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
         -mthumb -fstack-usage -specs=nano.specs)
 
-    target_compile_definitions(${TARGET_NAME}.elf
+    target_compile_definitions(${TARGET_NAME}
         PRIVATE
         CPU_MKE16F256VLH16
         CPU_MKE16F256VLH16_cm4
@@ -33,8 +33,9 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         DEBUG
         __NEWLIB__
         )
-    target_link_directories(${TARGET_NAME}.elf PRIVATE KeCommon/Linker)
-    target_link_options(${TARGET_NAME}.elf PRIVATE -Wl,-print-memory-usage,--sort-section=alignment,--gc-sections,--cref,-M=${TARGET_NAME}.map -nostdlib -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb  -T Ke16F256.ld)
+    target_link_directories(${TARGET_NAME} PRIVATE KeCommon/Linker)
+    target_link_options(${TARGET_NAME} PRIVATE -Wl,-print-memory-usage,--sort-section=alignment,--gc-sections,--cref,-M=${TARGET_NAME}.map -nostdlib -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb  -T Ke16F256.ld)
+    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${TARGET_NAME}.elf)
 
 elseif (CMAKE_BUILD_TYPE MATCHES Test)
     include(FetchContent)
