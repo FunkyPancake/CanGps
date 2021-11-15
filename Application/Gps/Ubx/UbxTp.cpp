@@ -85,9 +85,10 @@ std::vector<uint8_t> UbxTp::GetPackedData()
     std::copy(Payload.begin(), Payload.end(), rawData.begin() + 2);
     return rawData;
 }
-bool UbxTp::CheckAck(uint8_t msgClass,uint8_t subclass)
+
+bool UbxTp::CheckAck(uint8_t msgClass, uint8_t subclass)
 {
     std::vector<uint8_t> ackOk = {0x05, 0x01};
-    std::vector<uint8_t> raw = {Payload.begin(),Payload.begin() + ackOk.size()};
-    return MsgClass == msgClass && subclass == MsgSubclass &&  ackOk ==raw;
+    std::vector<uint8_t> raw = {Payload.begin(), Payload.begin() + (int)ackOk.size()};
+    return MsgClass == msgClass && subclass == MsgSubclass && ackOk == raw;
 }
