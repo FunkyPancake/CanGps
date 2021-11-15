@@ -10,8 +10,9 @@ uint32_t UbxNavPvt::GetU32Value(const uint8_t *rawData)
     return *(uint32_t *) rawData;
 }
 
-UbxNavPvt::UbxNavPvt(ICom *pCom){
-_com = pCom;
+UbxNavPvt::UbxNavPvt(ICom *pCom)
+{
+    _com = pCom;
 }
 
 bool UbxNavPvt::GetFrame()
